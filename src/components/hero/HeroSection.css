@@ -921,9 +921,13 @@
    -------------------------------------------------------------------------- */
 .plasma-idea-cards {
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(50% - (var(--machine-width) / 2) + 2px);
+  height: 380px;
   pointer-events: none;
-  z-index: 25;
+  z-index: 10;
 }
 
 .plasma-idea-card {
@@ -1020,8 +1024,8 @@
 }
 
 .plasma-idea-card--concept {
-  left: 74%;
-  top: 19%;
+  right: 8%;
+  top: 12%;
   animation: idea-float-3 3.8s ease-in-out infinite alternate 1s;
 }
 .plasma-idea-card--concept::after {
@@ -1040,8 +1044,8 @@
 }
 
 .plasma-idea-card--strategy {
-  left: 56%;
-  top: 72%;
+  right: 8%;
+  top: 62%;
   animation: idea-float-5 5.2s ease-in-out infinite alternate 0.8s;
 }
 .plasma-idea-card--strategy::after {
@@ -1775,9 +1779,16 @@
 /* --------------------------------------------------------------------------
    RESPONSIVE DESIGN (TABLET & MOBILE)
    -------------------------------------------------------------------------- */
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .header-section {
-    padding: 12px 16px;
+    padding: calc(12px + env(safe-area-inset-top, 0px))
+      max(16px, env(safe-area-inset-right, 0px)) 12px
+      max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .nav-inner {
+    padding: 6px 10px 6px 16px;
+    gap: 12px;
   }
 
   .nav-menu-2,
@@ -1787,6 +1798,9 @@
 
   .menu-button-2 {
     display: flex;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
   }
 
   .mobile-nav-drawer {
@@ -1796,6 +1810,7 @@
     overflow: hidden;
     max-height: 0;
     opacity: 0;
+    visibility: hidden;
     padding: 0 14px;
     box-sizing: border-box;
     transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.3s ease;
@@ -1803,8 +1818,12 @@
   }
 
   .mobile-nav-drawer.is-open {
-    max-height: 400px;
+    max-height: calc(100vh - 100px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 100px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     opacity: 1;
+    visibility: visible;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 12px 14px 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
@@ -1814,6 +1833,8 @@
     align-items: center;
     gap: 8px;
     padding: 10px 8px;
+    min-height: 44px;
+    flex-shrink: 0;
     color: rgba(255, 255, 255, 0.75);
     font-family: var(--font-body);
     font-size: 14.5px;
@@ -1823,7 +1844,8 @@
     transition: background 0.2s ease, color 0.2s ease;
   }
 
-  .mobile-nav-link:hover {
+  .mobile-nav-link:hover,
+  .mobile-nav-link.is-active {
     color: #ffffff;
     background: rgba(255, 255, 255, 0.06);
   }
@@ -1833,30 +1855,138 @@
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
+    flex-shrink: 0;
   }
 
   .mobile-nav-cta .button-03,
   .mobile-nav-cta .button-text-wrapper {
     width: 100%;
+    min-height: 44px;
+  }
+
+  /* Each part of the mobile transformation has its own row. */
+  .hero-section {
+    min-height: auto;
+    justify-content: flex-start;
+    padding-top: calc(104px + env(safe-area-inset-top, 0px));
+    gap: 28px;
   }
 
   .hero-conveyor-wrap {
-    --machine-width: 250px;
-    height: 350px;
+    --machine-width: clamp(176px, 50vw, 224px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    justify-items: center;
+    gap: 24px;
+    height: auto;
+    margin: 0;
+    padding: 0 0 8px;
+    isolation: isolate;
+  }
+
+  .hero-conveyor-wrap::before {
+    content: "";
+    position: absolute;
+    top: 32px;
+    bottom: 72px;
+    left: calc(50% - 1px);
+    width: 2px;
+    background: linear-gradient(180deg, transparent, #91a0ff 20%, #6555ff 80%, transparent);
+    box-shadow: 0 0 12px #6555ff, 0 0 28px rgba(101, 85, 255, 0.45);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .plasma-beam-track {
+    display: none;
+  }
+
+  .plasma-idea-cards {
+    position: relative;
+    inset: auto;
+    transform: none;
+    grid-row: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 6px;
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    padding: 0 max(16px, env(safe-area-inset-right, 0px))
+      0 max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .plasma-idea-card {
+    position: static;
+    flex: 0 0 auto;
+    padding: 6px 9px;
+    gap: 5px;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+    animation: none;
+    will-change: auto;
+  }
+
+  .plasma-idea-card::after {
+    display: none;
   }
 
   .transformation-chamber {
-    width: 250px;
-    height: 330px;
+    position: relative;
+    inset: auto;
+    transform: none;
+    grid-row: 2;
+    width: var(--machine-width);
+    height: calc(var(--machine-width) * 1.14);
+  }
+
+  .hero-center-card {
+    border-radius: 22px;
+  }
+
+  .conveyor-viewport {
+    position: relative;
+    inset: auto;
+    grid-row: 3;
+    height: 150px;
+    min-width: 0;
+    mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+  }
+
+  .conveyor-track--polished {
+    clip-path: none;
   }
 
   .conveyor-card {
-    width: 230px;
-    height: 150px;
-    padding: 0;
+    width: 190px;
+    height: 134px;
+  }
+
+  .conveyor-track__inner {
+    gap: 16px;
+  }
+
+  .conveyor-vignette {
+    width: 32px;
+  }
+
+  .hero-editorial {
+    width: 100%;
+    padding: 0 max(20px, env(safe-area-inset-left, 0px))
+      40px max(20px, env(safe-area-inset-right, 0px));
+  }
+
+  .hero-editorial__container {
+    max-width: 680px;
   }
 
   .hero-editorial__headline {
-    font-size: clamp(2rem, 7vw, 2.8rem);
+    margin-bottom: 0;
+    font-size: clamp(1.75rem, 5.8vw, 2.8rem);
+    line-height: 1.12;
+    text-wrap: balance;
   }
 }

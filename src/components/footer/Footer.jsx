@@ -169,9 +169,9 @@ export default function Footer() {
                 type="button"
                 onClick={() => openContactModal()}
                 className="footer-email-link"
-                aria-label="Open contact modal to send message to hello@pointfex.com"
+                aria-label="Open contact modal to send message to contact.pointfex@gmail.com"
               >
-                hello@pointfex.com
+                contact.pointfex@gmail.com
               </button>
             </div>
           </div>

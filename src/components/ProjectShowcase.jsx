@@ -26,8 +26,8 @@ export default function ProjectShowcase() {
     // GSAP MatchMedia for responsive behavior & accessibility
     const mm = gsap.matchMedia();
 
-    // Desktop: screens 900px and up with no reduced-motion preference
-    mm.add("(min-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
+    // Use native scrolling on small or short screens and for reduced motion.
+    mm.add("(min-width: 900px) and (min-height: 650px) and (prefers-reduced-motion: no-preference)", () => {
       const section = sectionRef.current;
       const track = trackRef.current;
       if (!section || !track) return;
@@ -96,19 +96,20 @@ export default function ProjectShowcase() {
           {/* Introductory Moving Panel */}
           <IntroPanel intro={showcaseIntro} />
 
-          {/* Sequential Project Cards */}
-          {projectsData.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-            />
-          ))}
+          <div className="showcase-projects" role="region" aria-label="Project gallery">
+            {projectsData.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+              />
+            ))}
 
-          {/* End buffer element to ensure generous terminal spacing and prevent clipping */}
-          <div className="showcase-track__end-buffer" aria-hidden="true" />
+            <div className="showcase-track__end-buffer" aria-hidden="true" />
+          </div>
         </div>
       </div>
+      <p className="showcase-swipe-hint" aria-hidden="true">Swipe to explore <span>→</span></p>
     </section>
   );
 }

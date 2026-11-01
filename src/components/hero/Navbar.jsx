@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useContactModal } from "../../context/ContactModalContext";
 
 /**
@@ -30,7 +30,39 @@ const NAV_ITEMS = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const headerRef = useRef(null);
+  const menuButtonRef = useRef(null);
   const { openContactModal } = useContactModal();
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia("(min-width: 961px)");
+    const closeOnDesktop = () => {
+      if (desktopQuery.matches) setMobileOpen(false);
+    };
+    desktopQuery.addEventListener("change", closeOnDesktop);
+    return () => desktopQuery.removeEventListener("change", closeOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    const handlePointerDown = (event) => {
+      if (!headerRef.current?.contains(event.target)) setMobileOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [mobileOpen]);
 
   // Scroll spy to highlight the current section as the user scrolls
   useEffect(() => {
@@ -88,7 +120,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="header-section">
+    <header ref={headerRef} className="header-section">
       <div className="navbar-container">
         <div className="na-outer-border">
           <div className="nav-inner-wrap">
@@ -150,8 +182,10 @@ export default function Navbar() {
               <button
                 type="button"
                 className="menu-button-2"
-                aria-label="Toggle navigation menu"
+                ref={menuButtonRef}
+                aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation"
                 onClick={() => setMobileOpen((prev) => !prev)}
               >
                 <div className={`hamburger ${mobileOpen ? "is-open" : ""}`}>
@@ -163,7 +197,13 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Navigation Drawer */}
-            <div className={`mobile-nav-drawer ${mobileOpen ? "is-open" : ""}`}>
+            <nav
+              id="mobile-navigation"
+              className={`mobile-nav-drawer ${mobileOpen ? "is-open" : ""}`}
+              aria-label="Mobile navigation"
+              inert={!mobileOpen}
+              data-lenis-prevent
+            >
               {NAV_ITEMS.map((item) => {
                 const isActive = activeSection === item.id;
                 return (
@@ -195,7 +235,7 @@ export default function Navbar() {
                   </div>
                 </button>
               </div>
-            </div>
+            </nav>
           </div>
         </div>
       </div>

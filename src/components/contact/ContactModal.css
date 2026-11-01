@@ -4,7 +4,11 @@
 
 .contact-modal-overlay {
   position: fixed;
-  inset: 0;
+  top: var(--contact-viewport-top, 0px);
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: var(--contact-viewport-height, 100dvh);
   z-index: 10000;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(16px);
@@ -12,7 +16,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: max(12px, env(safe-area-inset-top, 0px))
+    max(12px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px))
+    max(12px, env(safe-area-inset-left, 0px));
+  overflow: hidden;
   box-sizing: border-box;
   animation: modal-overlay-fade 0.22s ease-out;
 }
@@ -26,8 +34,12 @@
   position: relative;
   width: 100%;
   max-width: 580px;
-  max-height: 92vh;
+  max-height: 100%;
+  min-height: 0;
+  min-width: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: #080c14;
   border: 1px solid rgba(56, 189, 248, 0.22);
   border-radius: 24px;
@@ -149,6 +161,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 12px;
   margin-bottom: 22px;
 }
 
@@ -173,8 +186,8 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,12 +230,13 @@
 
 .contact-modal__tier-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
 .contact-modal__tier-card {
   position: relative;
+  min-width: 0;
   background: rgba(14, 20, 32, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
@@ -316,6 +330,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .contact-modal__label {
@@ -369,11 +384,13 @@
 
 .contact-modal__input {
   width: 100%;
+  min-width: 0;
   background: transparent;
   border: none;
   padding: 11px 13px 11px 40px;
   font-family: var(--font-body);
-  font-size: 0.86rem;
+  font-size: 1rem;
+  min-height: 44px;
   color: #ffffff;
   outline: none;
   box-sizing: border-box;
@@ -390,7 +407,7 @@
   border: none;
   padding: 11px 13px 11px 40px;
   font-family: var(--font-body);
-  font-size: 0.86rem;
+  font-size: 1rem;
   color: #ffffff;
   outline: none;
   resize: vertical;
@@ -486,6 +503,29 @@
   }
 
   .contact-modal__tier-sub {
-    font-size: 0.66rem;
+    font-size: 0.72rem;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-modal__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .contact-modal__submit-btn {
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 360px) {
+  .contact-modal {
+    padding: 20px 16px;
+  }
+
+  .contact-modal__tier-grid {
+    gap: 6px;
   }
 }

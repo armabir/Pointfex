@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useContactModal } from "../../context/ContactModalContext";
 import "./ContactModal.css";
 
@@ -47,23 +47,65 @@ export default function ContactModal() {
   const { isOpen, selectedTier, setSelectedTier, closeContactModal } = useContactModal();
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const overlayRef = useRef(null);
 
   // Close on Escape key press & prevent background scroll
   useEffect(() => {
     if (!isOpen) return;
 
+    const overlay = overlayRef.current;
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    const viewport = window.visualViewport;
+    let resizeFrame;
+
+    const updateViewport = () => {
+      if (!viewport) return;
+      overlay.style.setProperty("--contact-viewport-height", `${viewport.height}px`);
+      overlay.style.setProperty("--contact-viewport-top", `${viewport.offsetTop}px`);
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        if (overlay.contains(document.activeElement)) {
+          document.activeElement.scrollIntoView({ block: "nearest" });
+        }
+      });
+    };
+
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         closeContactModal();
+      }
+      if (e.key === "Tab") {
+        const focusable = [...overlay.querySelectorAll("button, input, textarea, a[href]")]
+          .filter((element) => !element.disabled && element.getClientRects().length);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
+    overlay.querySelector(".contact-modal__close-btn")?.focus({ preventScroll: true });
+    updateViewport();
+    viewport?.addEventListener("resize", updateViewport);
+    viewport?.addEventListener("scroll", updateViewport);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      viewport?.removeEventListener("resize", updateViewport);
+      viewport?.removeEventListener("scroll", updateViewport);
+      cancelAnimationFrame(resizeFrame);
+      document.body.style.overflow = previousOverflow;
+      if (previousFocus instanceof HTMLElement && !previousFocus.closest("[inert]")) {
+        previousFocus.focus({ preventScroll: true });
+      }
     };
   }, [isOpen, closeContactModal]);
 
@@ -106,7 +148,9 @@ export default function ContactModal() {
 
   return (
     <div
+      ref={overlayRef}
       className="contact-modal-overlay"
+      data-lenis-prevent
       onClick={(e) => {
         if (e.target === e.currentTarget) closeContactModal();
       }}
