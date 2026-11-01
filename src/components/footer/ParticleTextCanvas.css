@@ -26,6 +26,12 @@
   inset: 0;
 }
 
+@media (max-width: 860px) {
+  .particle-text-banner {
+    height: clamp(120px, 26vw, 220px);
+  }
+}
+
 /* Screen-reader accessible hidden text */
 .sr-only {
   position: absolute;

@@ -12,7 +12,7 @@
   box-sizing: border-box;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 900px) and (min-height: 650px) and (prefers-reduced-motion: no-preference) {
   .showcase-section {
     height: 100vh;
     height: 100dvh;
@@ -101,7 +101,7 @@
   overflow: hidden;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 900px) and (min-height: 650px) and (prefers-reduced-motion: no-preference) {
   .showcase-stage {
     flex: 1;
     display: flex;
@@ -120,6 +120,14 @@
   padding-right: clamp(60px, 12vw, 240px);
   width: max-content;
   will-change: transform;
+}
+
+.showcase-projects {
+  display: contents;
+}
+
+.showcase-swipe-hint {
+  display: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -300,53 +308,85 @@
    RESPONSIVE: MOBILE & TABLET (< 900px)
    Native horizontal swipeable carousel without pinning
    -------------------------------------------------------------------------- */
-@media (max-width: 899px) {
+@media (max-width: 899px), (max-height: 649px), (prefers-reduced-motion: reduce) {
   .showcase-section {
-    padding: 24px 0;
+    padding: 40px 0;
   }
 
   .showcase-stage {
     height: auto;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .showcase-track {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scroll-padding-left: clamp(20px, 5vw, 32px);
-    padding-left: clamp(20px, 5vw, 32px);
-    padding-right: clamp(20px, 5vw, 32px);
-    padding-bottom: 24px;
-    gap: 24px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+    padding: 0;
+    will-change: auto;
   }
 
-  .showcase-track::-webkit-scrollbar {
-    display: none;
+  .showcase-projects {
+    --gallery-gutter: var(--space-container-px);
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--gallery-gutter);
+    padding: 0 var(--gallery-gutter) 16px;
+    gap: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 transparent;
+  }
+
+  .showcase-projects::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  .showcase-projects::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 3px;
   }
 
   .showcase-intro {
-    width: 84vw;
-    max-width: 420px;
-    scroll-snap-align: start;
-    padding-right: 0;
+    width: auto;
+    max-width: 680px;
+    padding: 0 var(--space-container-px);
   }
 
   .showcase-intro__headline {
-    font-size: clamp(2rem, 8vw, 3rem);
+    font-size: clamp(1.875rem, 7vw, 3rem);
   }
 
   .project-card {
-    width: 84vw;
-    max-width: 440px;
+    width: min(84vw, 480px);
+    min-width: 0;
     scroll-snap-align: start;
   }
 
+  .project-card__image-wrapper {
+    max-height: none;
+  }
+
   .showcase-track__end-buffer {
-    width: 40vw;
-    max-width: 160px;
-    scroll-snap-align: start;
+    display: none;
+  }
+
+  .showcase-swipe-hint {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px var(--space-container-px) 0;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+
+  .showcase-swipe-hint span {
+    color: #38bdf8;
   }
 }

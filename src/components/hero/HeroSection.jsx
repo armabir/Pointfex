@@ -1,4 +1,4 @@
-import PlasmaStream from "./PlasmaStream";
+import PlasmaStream, { CreativeInputs } from "./PlasmaStream";
 import ConveyorTrack from "./ConveyorTrack";
 import TransformationChamber from "./TransformationChamber";
 import "./HeroSection.css";
@@ -17,6 +17,8 @@ export default function HeroSection() {
       <div className="hero-conveyor-wrap">
         {/* Glowing Plasma Stream: Coming from Left to the Middle falling onto the Machine */}
         <PlasmaStream />
+
+        <CreativeInputs />
 
         {/* Continuous Horizontal Conveyor: Emerging on Right */}
         <ConveyorTrack />

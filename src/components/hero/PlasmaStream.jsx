@@ -144,42 +144,45 @@ export default function PlasmaStream() {
           </div>
         </div>
       </div>
-
-      {/* 4. Small Floating Idea / Inspiration Input Cards (Feeding into the Machine) */}
-      <div className="plasma-idea-cards" aria-label="Creative inputs feeding into the transformation machine">
-        {/* Cards floating above the plasma beam */}
-        <div className="plasma-idea-card plasma-idea-card--idea">
-          <span className="plasma-idea-card__spark">✦</span>
-          <span className="plasma-idea-card__text">Idea</span>
-          <span className="plasma-idea-card__arrow">→</span>
-        </div>
-
-        <div className="plasma-idea-card plasma-idea-card--vision">
-          <span className="plasma-idea-card__spark">✦</span>
-          <span className="plasma-idea-card__text">Vision</span>
-          <span className="plasma-idea-card__arrow">→</span>
-        </div>
-
-        <div className="plasma-idea-card plasma-idea-card--concept">
-          <span className="plasma-idea-card__spark">✦</span>
-          <span className="plasma-idea-card__text">Concept</span>
-          <span className="plasma-idea-card__arrow">→</span>
-        </div>
-
-        {/* Cards floating below the plasma beam */}
-        <div className="plasma-idea-card plasma-idea-card--inspiration">
-          <span className="plasma-idea-card__spark">✦</span>
-          <span className="plasma-idea-card__text">Inspiration</span>
-          <span className="plasma-idea-card__arrow">→</span>
-        </div>
-
-        <div className="plasma-idea-card plasma-idea-card--strategy">
-          <span className="plasma-idea-card__spark">✦</span>
-          <span className="plasma-idea-card__text">Strategy</span>
-          <span className="plasma-idea-card__arrow">→</span>
-        </div>
-      </div>
     </div>
   );
 }
 
+// Keep the inputs in their own layout area so they can wrap above the machine.
+export function CreativeInputs() {
+  return (
+    <div className="plasma-idea-cards" aria-hidden="true">
+      {/* Cards floating above the plasma beam */}
+      <div className="plasma-idea-card plasma-idea-card--idea">
+        <span className="plasma-idea-card__spark">✦</span>
+        <span className="plasma-idea-card__text">Idea</span>
+        <span className="plasma-idea-card__arrow">→</span>
+      </div>
+
+      <div className="plasma-idea-card plasma-idea-card--vision">
+        <span className="plasma-idea-card__spark">✦</span>
+        <span className="plasma-idea-card__text">Vision</span>
+        <span className="plasma-idea-card__arrow">→</span>
+      </div>
+
+      <div className="plasma-idea-card plasma-idea-card--concept">
+        <span className="plasma-idea-card__spark">✦</span>
+        <span className="plasma-idea-card__text">Concept</span>
+        <span className="plasma-idea-card__arrow">→</span>
+      </div>
+
+      {/* Cards floating below the plasma beam */}
+      <div className="plasma-idea-card plasma-idea-card--inspiration">
+        <span className="plasma-idea-card__spark">✦</span>
+        <span className="plasma-idea-card__text">Inspiration</span>
+        <span className="plasma-idea-card__arrow">→</span>
+      </div>
+
+      <div className="plasma-idea-card plasma-idea-card--strategy">
+        <span className="plasma-idea-card__spark">✦</span>
+        <span className="plasma-idea-card__text">Strategy</span>
+        <span className="plasma-idea-card__arrow">→</span>
+      </div>
+    </div>
+  );
+}

@@ -99,3 +99,13 @@
   );
   filter: blur(1.5px);
 }
+
+@media (max-width: 600px) {
+  .section-gap-divider {
+    height: 56px;
+  }
+
+  .section-gap-divider .glowing-separator {
+    width: min(75vw, 320px);
+  }
+}

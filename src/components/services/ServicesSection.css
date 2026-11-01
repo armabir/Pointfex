@@ -74,7 +74,7 @@
 
 .services-pinwheel {
   display: grid;
-  grid-template-columns: 1fr 108px 1fr;
+  grid-template-columns: minmax(0, 1fr) 108px minmax(0, 1fr);
   grid-template-rows: 375px 108px 375px;
   gap: 20px;
   position: relative;
@@ -89,6 +89,7 @@
    -------------------------------------------------------------------------- */
 .service-card {
   position: relative;
+  min-width: 0;
   border-radius: 26px;
   padding: 30px 28px;
   display: flex;
@@ -495,8 +496,9 @@
 /* Overlapping Venn Diagram Circles (Bigger circles with wide, tall intersection) */
 .venn-diagram {
   position: relative;
-  width: 278px;
-  height: 184px;
+  width: min(278px, 100%);
+  aspect-ratio: 278 / 184;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -505,8 +507,8 @@
 
 .venn-circle {
   position: absolute;
-  width: 184px;
-  height: 184px;
+  width: 66.187%;
+  aspect-ratio: 1;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1267,22 +1269,35 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 960px) {
   .services-section {
-    padding: 60px 20px 80px;
+    padding: 48px var(--space-container-px);
   }
 
   .services-pinwheel {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
     gap: 16px;
   }
 
   .services-central-hub {
     order: -1;
-    margin-bottom: 20px;
+    grid-column: 1 / -1;
+    grid-row: auto;
+    justify-self: center;
+    width: 108px;
+    height: 108px;
+    margin-bottom: 16px;
   }
 
   .service-card {
-    min-height: 260px;
+    min-height: 360px;
+    padding: 24px 20px;
+    gap: 20px;
+  }
+
+  .service-visual {
+    flex: none;
+    min-height: 195px;
+    margin-bottom: 0;
   }
 
   .service-card--1,
@@ -1291,5 +1306,28 @@
   .service-card--4 {
     grid-column: auto;
     grid-row: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .services-header {
+    margin-bottom: 32px;
+  }
+
+  .services-header__title {
+    font-size: clamp(1.875rem, 7.5vw, 2.5rem);
+    line-height: 1.12;
+  }
+
+  .services-pinwheel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .service-card {
+    border-radius: 22px;
+  }
+
+  .venn-label {
+    font-size: clamp(0.875rem, 4vw, 1.05rem);
   }
 }

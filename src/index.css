@@ -55,6 +55,9 @@ html {
   text-rendering: optimizeLegibility;
   scroll-behavior: auto; /* Managed intentionally by GSAP ScrollTrigger */
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(100px + env(safe-area-inset-top, 0px));
 }
 
 body {
@@ -88,6 +91,12 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+@media (max-width: 899px) {
+  :root {
+    --space-container-px: clamp(16px, 5vw, 24px);
+  }
 }
 
 /* Reduced motion preference */
